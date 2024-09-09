@@ -19,10 +19,14 @@ func NewPostgresClient(host, port, user, pass, dbName, sslMode string) *Postgres
 
 	db, err := sqlx.Connect("postgres", addr)
 	if err != nil {
-		log.Printf("failed to connect database: %v", err)
+		log.Fatalf("failed to connect database: %v", err)
 		return nil
 	}
 	defer db.Close()
+
+	if err = db.Ping(); err != nil {
+		log.Fatalf("failed to ping database: %v", err)
+	}
 
 	return &PostgresClient{db: db}
 }
