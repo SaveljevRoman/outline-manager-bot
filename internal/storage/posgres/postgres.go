@@ -1,6 +1,7 @@
 package posgres
 
 import (
+	"context"
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
@@ -11,7 +12,11 @@ type PostgresClient struct {
 	db *sqlx.DB
 }
 
-func NewPostgresClient(host, port, user, pass, dbName, sslMode string) *PostgresClient {
+func NewPostgresClient(
+	ctx context.Context,
+	host, port, user, pass, dbName, sslMode string,
+	maxOpenConns, maxIdleConns int,
+) *PostgresClient {
 	addr := fmt.Sprintf(
 		"postgres://%s:%s@%s:%s/%s?sslmode=%s",
 		user, pass, host, port, dbName, sslMode,
@@ -22,9 +27,10 @@ func NewPostgresClient(host, port, user, pass, dbName, sslMode string) *Postgres
 		log.Fatalf("failed to connect database: %v", err)
 		return nil
 	}
-	defer db.Close()
+	db.SetMaxOpenConns(maxOpenConns)
+	db.SetMaxIdleConns(maxIdleConns)
 
-	if err = db.Ping(); err != nil {
+	if err = db.PingContext(ctx); err != nil {
 		log.Fatalf("failed to ping database: %v", err)
 	}
 

@@ -22,12 +22,14 @@ type TGConfig struct {
 }
 
 type PostgresConfig struct {
-	Host    string `env:"POSTGRES_HOST" env-default:"127.0.0.1"`
-	Port    string `env:"POSTGRES_PORT" env-default:"54321"`
-	User    string `env:"POSTGRES_USERNAME" env-default:"postgres"`
-	Pass    string `env:"POSTGRES_PASSWORD" env-default:"root"`
-	DbName  string `env:"POSTGRES_DATABASE" env-default:"outline_manager"`
-	SslMode string `env:"POSTGRES_SSL_MODE" env-default:"disable"`
+	Host         string `env:"POSTGRES_HOST" env-default:"127.0.0.1"`
+	Port         string `env:"POSTGRES_PORT" env-default:"54321"`
+	User         string `env:"POSTGRES_USERNAME" env-default:"postgres"`
+	Pass         string `env:"POSTGRES_PASSWORD" env-default:"root"`
+	DbName       string `env:"POSTGRES_DATABASE" env-default:"outline_manager"`
+	SslMode      string `env:"POSTGRES_SSL_MODE" env-default:"disable"`
+	MaxOpenConns int    `env:"POSTGRES_MAX_OPEN_CONNS" env-default:"25"`
+	MaxIdleConns int    `env:"POSTGRES_MAX_IDLE_CONNS" env-default:"10"`
 }
 
 func LoadConfig() *Config {

@@ -25,12 +25,10 @@ func (tgc *TgBotClient) CommandStart() ViewFunc {
 			//),
 		)
 
-		// todo database err
-		own, err := tgc.Storage.PgClient.InsertNewOwner(ctx, update.FromChat().ID, update.Message.From.UserName)
+		_, err := tgc.Storage.PgClient.InsertNewOwner(ctx, update.FromChat().ID, update.Message.From.UserName)
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Println(own)
 
 		msg := tgbotapi.NewMessage(
 			update.FromChat().ID,

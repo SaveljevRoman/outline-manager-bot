@@ -16,7 +16,7 @@ type App struct {
 }
 
 func NewApp(ctx context.Context, cfg *config.Config) *App {
-	tgClient, err := telegram.NewTgBotClient(cfg.TgConf, cfg.PgConf)
+	tgClient, err := telegram.NewTgBotClient(ctx, cfg.TgConf, cfg.PgConf)
 	tgClient.RegisterCmdView("start", tgClient.CommandStart())
 
 	if err != nil {

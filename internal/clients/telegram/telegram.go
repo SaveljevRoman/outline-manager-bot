@@ -24,7 +24,7 @@ type TgBotClient struct {
 
 type ViewFunc func(ctx context.Context, bot *tgbotapi.BotAPI, update tgbotapi.Update) error
 
-func NewTgBotClient(tgConf *config.TGConfig, pgConf *config.PostgresConfig) (*TgBotClient, error) {
+func NewTgBotClient(ctx context.Context, tgConf *config.TGConfig, pgConf *config.PostgresConfig) (*TgBotClient, error) {
 	if tgConf.TgBotToken == "" {
 		return nil, errors.New("telegram bot token not found")
 	}
@@ -39,7 +39,7 @@ func NewTgBotClient(tgConf *config.TGConfig, pgConf *config.PostgresConfig) (*Tg
 		debug:         tgConf.Debug,
 		updateOffset:  tgConf.UpdateOffset,
 		updateTimeout: tgConf.UpdateTimeout,
-		Storage:       storage.NewStorage(pgConf),
+		Storage:       storage.NewStorage(ctx, pgConf),
 	}, nil
 }
 
