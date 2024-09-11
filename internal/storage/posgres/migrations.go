@@ -2,15 +2,15 @@ package posgres
 
 //todo migrations
 /*-- auto-generated definition
+CREATE SEQUENCE owner_id_seq;
 create table owner
 (
-name             varchar(255)                                                                not null,
-chat_id          bigint                                                                      not null,
-id               bigint                   default nextval('outline_admins_id_seq'::regclass) not null
-constraint outline_admins_pkey
-primary key,
-created_at       timestamp with time zone default now()                                      not null,
-is_outline_admin boolean                  default false                                      not null
+id               bigint                   default nextval('owner_id_seq'::regclass) not null
+constraint outline_admins_pkey primary key,
+name             varchar(255)                                                not null,
+chat_id          bigint                                                      not null,
+created_at       timestamp with time zone default now()                      not null,
+is_outline_admin boolean                  default false                      not null
 );
 
 comment on table owner is 'клиенты бота';
