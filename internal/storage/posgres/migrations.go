@@ -36,3 +36,27 @@ create unique index owner_chat_id_uindex
 on owner (chat_id);
 
 comment on index owner_chat_id_uindex is 'id чата с пользователем, основной  его идентификатор';*/
+
+/*-- auto-generated definition
+CREATE SEQUENCE outline_server_id_seq;
+create table outline_server
+(
+id           bigint                                 not null
+constraint outline_server_pk
+primary key,
+chat_id      integer                                not null,
+api_url      varchar(255)                           not null,
+cert_sha_256 varchar                                not null,
+created_at   timestamp with time zone default now() not null
+);
+
+comment on table outline_server is 'ключи от серверов outline';
+
+alter table outline_server
+owner to postgres;
+
+create unique index outline_server_id_uindex
+on outline_server (id);
+
+create unique index outline_server_chat_id_uindex
+on outline_server (chat_id);*/
