@@ -77,15 +77,14 @@ func (tgc *TgBotClient) handleUpdate(ctx context.Context, update tgbotapi.Update
 		}
 	}()
 
-	if update.Message == nil || !update.Message.IsCommand() {
-		return
+	var cmd string
+	if update.Message != nil && update.Message.IsCommand() {
+		cmd = update.Message.Text
 	}
 
-	if !update.Message.IsCommand() {
-		return
+	if cmd == "" && update.CallbackQuery != nil {
+		cmd = update.CallbackQuery.Data
 	}
-
-	cmd := update.Message.Command()
 
 	cmdView, ok := tgc.cmdViews[cmd]
 	if !ok {

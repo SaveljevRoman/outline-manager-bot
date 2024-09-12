@@ -36,7 +36,7 @@ func (tgc *TgBotClient) CommandStart() ViewFunc {
 		)
 		msg.ReplyMarkup = numericKeyboard
 
-		if _, err := bot.Send(msg); err != nil {
+		if _, err = bot.Send(msg); err != nil {
 			return err
 		}
 		return nil

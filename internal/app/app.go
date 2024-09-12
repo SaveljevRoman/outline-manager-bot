@@ -17,7 +17,8 @@ type App struct {
 
 func NewApp(ctx context.Context, cfg *config.Config) *App {
 	tgClient, err := telegram.NewTgBotClient(ctx, cfg.TgConf, cfg.PgConf)
-	tgClient.RegisterCmdView("start", tgClient.CommandStart())
+	tgClient.RegisterCmdView("/start", tgClient.CommandStart())
+	tgClient.RegisterCmdView("/add_outline_server", tgClient.CommandAddOutlineServer())
 
 	if err != nil {
 		log.Fatalf("%s. %v", logPointStart, err)
