@@ -12,6 +12,7 @@ type Owner struct {
 	ChatId         int64     `db:"chat_id"`
 	IsOutlineAdmin bool      `db:"is_outline_admin"`
 	CreatedAt      time.Time `db:"created_at"`
+	IsInserted     bool      `db:"is_inserted"`
 }
 
 func (pc *PostgresClient) InsertNewOwner(ctx context.Context, chatId int64, name string) (*Owner, error) {
@@ -25,8 +26,8 @@ func (pc *PostgresClient) InsertNewOwner(ctx context.Context, chatId int64, name
 		QueryRowContext(ctx, `INSERT INTO owner (chat_id, name)
         	VALUES ($1, $2)
         	ON CONFLICT (chat_id) DO UPDATE SET name = EXCLUDED.name
-        	RETURNING id, name, chat_id, is_outline_admin, created_at`, chatId, name).
-		Scan(&owner.Id, &owner.Name, &owner.ChatId, &owner.IsOutlineAdmin, &owner.CreatedAt)
+        	RETURNING id, name, chat_id, is_outline_admin, created_at, (xmax = 0) AS is_inserted`, chatId, name).
+		Scan(&owner.Id, &owner.Name, &owner.ChatId, &owner.IsOutlineAdmin, &owner.CreatedAt, &owner.IsInserted)
 	if err != nil {
 		if rollbackErr := tx.Rollback(); rollbackErr != nil {
 			return nil, fmt.Errorf("failed to rollbacke insert new owner: %w", rollbackErr)

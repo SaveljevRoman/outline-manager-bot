@@ -25,9 +25,14 @@ func (tgc *TgBotClient) CommandStart() ViewFunc {
 			//),
 		)
 
-		_, err := tgc.Storage.PgClient.InsertNewOwner(ctx, update.FromChat().ID, update.Message.From.UserName)
+		owner, err := tgc.Storage.PgClient.InsertNewOwner(ctx, update.FromChat().ID, update.Message.From.UserName)
 		if err != nil {
 			fmt.Println(err)
+		}
+
+		// Если пользователь уже существует в базе, то просто выходим и ничего не пишем
+		if !owner.IsInserted {
+			return nil
 		}
 
 		msg := tgbotapi.NewMessage(
