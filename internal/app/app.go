@@ -20,7 +20,6 @@ func NewApp(ctx context.Context, cfg *config.Config) *App {
 	tgClient.RegisterCmdView("/start", tgClient.CommandStart())
 	tgClient.RegisterCmdView("/cancel_start", tgClient.CommandCancelStart())
 	tgClient.RegisterCmdView("/add_outline_server", tgClient.CommandAddOutlineServer())
-	//tgClient.RegisterCmdView("/cancel_add_outline_server", tgClient.CommandCancelAddOutlineServer())
 
 	if err != nil {
 		log.Fatalf("%s. %v", logPointStart, err)

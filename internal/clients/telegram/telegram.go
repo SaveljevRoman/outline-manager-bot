@@ -70,6 +70,7 @@ func (tgc *TgBotClient) Run(ctx context.Context) error {
 	}
 }
 
+// todo handleUpdate переделать на обработку не только команд но и сообщений
 func (tgc *TgBotClient) handleUpdate(ctx context.Context, update tgbotapi.Update) {
 	defer func() {
 		if p := recover(); p != nil {
@@ -77,16 +78,16 @@ func (tgc *TgBotClient) handleUpdate(ctx context.Context, update tgbotapi.Update
 		}
 	}()
 
-	var cmd string
-	if update.Message != nil && update.Message.IsCommand() {
-		cmd = update.Message.Text
+	var msg string
+	if update.Message != nil {
+		msg = update.Message.Text
 	}
 
-	if cmd == "" && update.CallbackQuery != nil {
-		cmd = update.CallbackQuery.Data
+	if msg == "" && update.CallbackQuery != nil {
+		msg = update.CallbackQuery.Data
 	}
 
-	cmdView, ok := tgc.cmdViews[cmd]
+	cmdView, ok := tgc.cmdViews[msg]
 	if !ok {
 		return
 	}
