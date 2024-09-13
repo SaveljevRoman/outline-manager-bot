@@ -30,7 +30,11 @@ func (tgc *TgBotClient) CommandAddOutlineServer() ViewFunc {
 			msgText,
 		)
 		msg.ParseMode = tgbotapi.ModeMarkdownV2
-
+		msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
+			tgbotapi.NewInlineKeyboardRow(
+				tgbotapi.NewInlineKeyboardButtonData("В начало", "/cancel_start"),
+			),
+		)
 		// todo здесь
 
 		if _, err := bot.Send(msg); err != nil {
@@ -40,3 +44,7 @@ func (tgc *TgBotClient) CommandAddOutlineServer() ViewFunc {
 		return nil
 	}
 }
+
+//func (tgc *TgBotClient) CommandCancelAddOutlineServer() ViewFunc {
+// todo
+//}
