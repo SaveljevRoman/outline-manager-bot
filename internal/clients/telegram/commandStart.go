@@ -15,11 +15,6 @@ func (tgc *TgBotClient) CommandStart() ViewFunc {
 			fmt.Println(err)
 		}
 
-		// Если пользователь уже существует в базе, то просто выходим и ничего не пишем
-		//if !owner.IsInserted {
-		//	return nil
-		//}
-
 		msg := tgc.mainMessage(update.FromChat().ID)
 
 		if _, err = bot.Send(msg); err != nil {
