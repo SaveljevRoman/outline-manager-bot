@@ -100,3 +100,9 @@ func (tgc *TgBotClient) handleUpdate(ctx context.Context, update tgbotapi.Update
 		}
 	}
 }
+
+func (tgc *TgBotClient) delMsgNoErr(chatId int64, msgId int) {
+	delMsg := tgbotapi.NewDeleteMessage(chatId, msgId)
+	// Игнорим ошибку поскольку над дальше отправлять сообщение пользователю, а логировать я пока что не собираюсь
+	_, _ = tgc.client.Request(delMsg)
+}

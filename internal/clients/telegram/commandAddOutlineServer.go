@@ -13,10 +13,7 @@ const (
 
 func (tgc *TgBotClient) CommandAddOutlineServer() ViewFunc {
 	return func(ctx context.Context, bot *tgbotapi.BotAPI, update tgbotapi.Update) error {
-		delMsg := tgbotapi.NewDeleteMessage(update.FromChat().ID, update.CallbackQuery.Message.MessageID)
-		if _, err := bot.Request(delMsg); err != nil {
-			return err
-		}
+		tgc.delMsgNoErr(update.FromChat().ID, update.CallbackQuery.Message.MessageID)
 
 		msgText := fmt.Sprintf(
 			"Для установки outline на Вашем сервере, выполните комманду:\n%s\n\n"+

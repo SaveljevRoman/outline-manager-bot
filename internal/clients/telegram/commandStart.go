@@ -8,20 +8,17 @@ import (
 
 func (tgc *TgBotClient) CommandStart() ViewFunc {
 	return func(ctx context.Context, bot *tgbotapi.BotAPI, update tgbotapi.Update) error {
-		delMsg := tgbotapi.NewDeleteMessage(update.FromChat().ID, update.Message.MessageID)
-		if _, err := bot.Request(delMsg); err != nil {
-			return err
-		}
+		tgc.delMsgNoErr(update.FromChat().ID, update.Message.MessageID)
 
-		owner, err := tgc.Storage.PgClient.InsertNewOwner(ctx, update.FromChat().ID, update.Message.From.UserName)
+		_, err := tgc.Storage.PgClient.InsertNewOwner(ctx, update.FromChat().ID, update.Message.From.UserName)
 		if err != nil {
 			fmt.Println(err)
 		}
 
 		// Если пользователь уже существует в базе, то просто выходим и ничего не пишем
-		if !owner.IsInserted {
-			return nil
-		}
+		//if !owner.IsInserted {
+		//	return nil
+		//}
 
 		msg := tgc.mainMessage(update.FromChat().ID)
 
@@ -43,13 +40,9 @@ func (tgc *TgBotClient) CommandCancelStart() ViewFunc {
 			mesId = update.CallbackQuery.Message.MessageID
 		}
 
-		delMsg := tgbotapi.NewDeleteMessage(update.FromChat().ID, mesId)
-		if _, err := bot.Request(delMsg); err != nil {
-			return err
-		}
+		tgc.delMsgNoErr(update.FromChat().ID, mesId)
 
 		msg := tgc.mainMessage(update.FromChat().ID)
-
 		if _, err := bot.Send(msg); err != nil {
 			return err
 		}
